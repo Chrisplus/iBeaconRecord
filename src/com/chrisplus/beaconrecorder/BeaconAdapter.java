@@ -29,10 +29,7 @@ public class BeaconAdapter extends BaseAdapter {
 	public BeaconAdapter(Context context) {
 		this.inflater = LayoutInflater.from(context);
 		this.beacons = new ArrayList<Beacon>();
-		File sdCard = Environment.getExternalStorageDirectory();
-		File dir = new File(sdCard.getAbsolutePath() + "/Beacon_Log/");
-		dir.mkdirs();
-		file = new File(dir, System.currentTimeMillis() + ".csv");
+
 	}
 
 	public void replaceWith(Collection<Beacon> newBeacons) {
@@ -74,19 +71,14 @@ public class BeaconAdapter extends BaseAdapter {
 				+ beacon.getMeasuredPower());
 		holder.rssiTextView.setText("RSSI: " + beacon.getRssi());
 
-		// // Log.d("Running",
-		// "," + System.currentTimeMillis() + "," + beacon.getRssi() + ","
-		// + beacon.getDistance());
-
-		String temp = System.currentTimeMillis() + "," + beacon.getRssi() + ","
+		String temp = System.currentTimeMillis() + ","
+				+ beacon.getProximityUUID() + "," + beacon.getRssi() + ","
 				+ beacon.getDistance() + "\r\n";
 		try {
-			if (outstream == null) {
-				outstream = new FileOutputStream(file);
+			if (outstream != null) {
+				outstream.write(temp.getBytes());
+				outstream.flush();
 			}
-
-			outstream.write(temp.getBytes());
-			outstream.flush();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -113,6 +105,13 @@ public class BeaconAdapter extends BaseAdapter {
 			}
 
 		}
+	}
+
+	public void record() {
+		File sdCard = Environment.getExternalStorageDirectory();
+		File dir = new File(sdCard.getAbsolutePath() + "/Beacon_Log/");
+		dir.mkdirs();
+		file = new File(dir, System.currentTimeMillis() + ".csv");
 	}
 
 	static class ViewHolder {

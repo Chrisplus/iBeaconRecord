@@ -12,6 +12,7 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -36,7 +37,6 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		init();
 	}
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -142,6 +142,33 @@ public class MainActivity extends Activity {
 		if (adapter != null) {
 			adapter.flush();
 		}
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		if (item.getTitle() == getText(R.string.action_save)) {
+			item.setTitle(R.string.action_stop);
+			item.setIcon(android.R.drawable.ic_media_pause);
+
+			if (adapter != null) {
+				adapter.record();
+				Toast.makeText(getApplicationContext(),
+						getText(R.string.toast_start), Toast.LENGTH_SHORT)
+						.show();
+			}
+		} else if (item.getTitle() == getText(R.string.action_stop)) {
+			item.setTitle(R.string.action_save);
+			item.setIcon(android.R.drawable.ic_menu_save);
+
+			if (adapter != null) {
+				adapter.flush();
+				Toast.makeText(getApplicationContext(),
+						getText(R.string.toast_stop), Toast.LENGTH_SHORT)
+						.show();
+			}
+		}
+
+		return super.onMenuItemSelected(featureId, item);
 	}
 
 }

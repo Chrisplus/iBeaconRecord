@@ -4,5 +4,8 @@
     <string name="app_name">BeaconRecorder</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_save">Save</string>
+    <string name="action_stop">Stop</string>
+    <string name="toast_start">Start Recording</string>
+    <string name="toast_stop">Stop Recording</string>
 
 </resources>
